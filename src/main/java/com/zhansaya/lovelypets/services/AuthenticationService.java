@@ -1,6 +1,7 @@
 package com.zhansaya.lovelypets.services;
 
 import com.zhansaya.lovelypets.domain.enums.Role;
+import com.zhansaya.lovelypets.domain.exceptions.AuthenticationFailedException;
 import com.zhansaya.lovelypets.domain.models.User;
 import com.zhansaya.lovelypets.repositories.UserRepository;
 import com.zhansaya.lovelypets.request.AuthenticationRequest;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -34,15 +36,19 @@ public class AuthenticationService {
                 .role(Role.Customer)
                 .build();
         repository.save(user);
-        var jwtToken =jwtService.generateToken(user);
+        var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder().token(jwtToken).build();
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-    authManager.authenticate(new UsernamePasswordAuthenticationToken(
-            request.getPhone(), request.getPassword()));
-    var user = repository.findByPhone(request.getPhone()).orElseThrow();//TODO handle exception
-    var jwtToken =jwtService.generateToken(user);
-    return AuthenticationResponse.builder().token(jwtToken).build();
+        authManager.authenticate(new UsernamePasswordAuthenticationToken(
+                request.getPhone(), request.getPassword()
+        ));
+        var user = repository.findByPhone(request.getPhone()).orElseThrow(
+                () -> new AuthenticationFailedException("User not found")
+        );
+
+        var jwtToken = jwtService.generateToken(user);
+        return AuthenticationResponse.builder().token(jwtToken).build();
     }
 }
