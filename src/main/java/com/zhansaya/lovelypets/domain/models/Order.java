@@ -3,8 +3,10 @@ package com.zhansaya.lovelypets.domain.models;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
+import java.time.Instant;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
@@ -16,12 +18,14 @@ import java.sql.Timestamp;
 @Table(name = "orders")
 public class Order {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @OneToMany
-    @JoinColumn(name = "customer_id", referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name = "customer_id", nullable = false)
     Customer customer;
 
-    Timestamp orderDate;
+    @CreationTimestamp
+    @Column(name = "order_date", nullable = false, updatable = false)
+    Instant orderDate;
 }

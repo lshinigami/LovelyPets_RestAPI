@@ -1,5 +1,5 @@
 package com.zhansaya.lovelypets.domain.enums;
 
-public enum Role {
-    CUSTOMER, SELLER
+public enum OrganizationType {
+    IP, TOO, AO
 }

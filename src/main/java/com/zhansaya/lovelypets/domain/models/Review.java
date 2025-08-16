@@ -3,8 +3,9 @@ package com.zhansaya.lovelypets.domain.models;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.CreationTimestamp;
 
-import java.sql.Timestamp;
+import java.time.Instant;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
@@ -16,18 +17,22 @@ import java.sql.Timestamp;
 @Table(name = "reviews")
 public class Review {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @OneToMany
+    @ManyToOne
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     Customer customer;
 
-    @OneToMany
+    @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     Product product;
-
+    @Column
     Integer rating;
+    @Column(name = "comment_text", length = 2000)
     String commentText;
-    Timestamp createdAt;
+
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    Instant createdAt;
 }

@@ -1,9 +1,6 @@
 package com.zhansaya.lovelypets.domain.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -17,9 +14,19 @@ import lombok.experimental.FieldDefaults;
 @Table(name = "categories")
 public class Category {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
+    @Column(nullable = false, length = 100, unique = true)
     String name;
+
+    @Column(name = "is_active", nullable = false)
     Boolean isActive;
+
+    @PrePersist
+    public void prePersist() {
+        if (isActive == null) {
+            isActive = true;
+        }
+    }
 }

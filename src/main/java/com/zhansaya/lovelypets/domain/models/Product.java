@@ -16,17 +16,20 @@ import java.math.BigDecimal;
 @Table(name = "products")
 public class Product {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @OneToMany
+    @ManyToOne
     @JoinColumn(name = "seller_id", referencedColumnName = "id")
     Seller seller;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     Category category;
 
+    @Column(name = "name", nullable = false, length = 100)
     String name;
+
+    @Column(name = "price", nullable = false, precision = 12, scale = 2)
     BigDecimal price;
 }

@@ -14,15 +14,20 @@ import lombok.experimental.FieldDefaults;
 @Table(name = "customers")
 public class Customer {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     User user;
 
+    @Column(length = 100)
     String city;
+
+    @Column(length = 200)
     String address;
+
+    @Column(name = "loyalty_member", nullable = false)
     Boolean loyaltyMember;
 
     @PrePersist
