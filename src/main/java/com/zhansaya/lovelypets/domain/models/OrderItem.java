@@ -13,20 +13,20 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Entity
-@Table(name = "products")
-public class Product {
+@Table(name = "order_items")
+public class OrderItem {
     @Id
     @GeneratedValue
     Long id;
 
     @OneToMany
-    @JoinColumn(name = "seller_id", referencedColumnName = "id")
-    Seller seller;
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
+    Order order;
 
-    @OneToOne
-    @JoinColumn(name = "category_id", referencedColumnName = "id")
-    Category category;
+    @OneToMany
+    @JoinColumn(name = "product_id", referencedColumnName = "id")
+    Product product;
 
-    String name;
-    BigDecimal price;
+    Integer itemQuantity;
+    BigDecimal totalPrice;
 }
