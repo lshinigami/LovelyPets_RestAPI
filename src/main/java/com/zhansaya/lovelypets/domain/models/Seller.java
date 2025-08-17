@@ -1,5 +1,6 @@
 package com.zhansaya.lovelypets.domain.models;
 
+import com.zhansaya.lovelypets.domain.enums.OrderStatus;
 import com.zhansaya.lovelypets.domain.enums.OrganizationType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -34,5 +35,21 @@ public class Seller {
 
     @Column(name = "bin", length = 12)
     String bin;
+
+    @Column(name = "is_verified")
+    Boolean verified;
+
+    @Column(name = "violations_count")
+    Integer violationsCount;
+
+    @PrePersist
+    public void prePersist() {
+        if (verified == null) {
+            verified = false;
+        }
+        if (violationsCount == null) {
+            violationsCount = 0;
+        }
+    }
 
 }

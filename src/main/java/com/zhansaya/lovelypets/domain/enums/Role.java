@@ -1,5 +1,5 @@
 package com.zhansaya.lovelypets.domain.enums;
 
 public enum Role {
-    CUSTOMER, SELLER
+    CUSTOMER, ADMIN, SELLER
 }

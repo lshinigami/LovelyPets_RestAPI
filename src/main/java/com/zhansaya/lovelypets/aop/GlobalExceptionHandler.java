@@ -16,7 +16,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AuthenticationFailedException.class)
     public ResponseEntity<?> handleAuthFailed(AuthenticationFailedException ex) {
-        // Log ex.getMessage() if needed
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(Map.of("error", "Invalid phone or password"));
     }

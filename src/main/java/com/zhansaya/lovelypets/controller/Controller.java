@@ -11,6 +11,6 @@ public class Controller {
 
     @GetMapping
     public ResponseEntity<String> hello() {
-        return ResponseEntity.ok("hello from Controller");
+        return ResponseEntity.ok("This token is valid");
     }
 }

@@ -2,6 +2,7 @@ package com.zhansaya.lovelypets.domain.models;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -17,9 +18,10 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    User user;
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    @OnDelete(action = org.hibernate.annotations.OnDeleteAction.CASCADE)
+    private User user;
 
     @Column(length = 100)
     String city;
@@ -30,10 +32,16 @@ public class Customer {
     @Column(name = "loyalty_member", nullable = false)
     Boolean loyaltyMember;
 
+    @Column(name = "discount_percent", nullable = false)
+    Integer discountPercent = 0;
+
     @PrePersist
     public void prePersist(){
         if (loyaltyMember == null) {
             loyaltyMember = false;
+        }
+        if (discountPercent == null) {
+            discountPercent = 0;
         }
     }
 }

@@ -2,7 +2,9 @@ package com.zhansaya.lovelypets.services;
 
 import com.zhansaya.lovelypets.domain.enums.Role;
 import com.zhansaya.lovelypets.domain.exceptions.AuthenticationFailedException;
+import com.zhansaya.lovelypets.domain.models.Customer;
 import com.zhansaya.lovelypets.domain.models.User;
+import com.zhansaya.lovelypets.repositories.CustomerRepository;
 import com.zhansaya.lovelypets.repositories.UserRepository;
 import com.zhansaya.lovelypets.request.AuthenticationRequest;
 import com.zhansaya.lovelypets.request.RegisterRequest;
@@ -24,6 +26,7 @@ public class AuthenticationService {
     final UserRepository repository;
     final PasswordEncoder encoder;
     final JwtService jwtService;
+    final CustomerRepository customerRepo;
     final AuthenticationManager authManager;
 
     public AuthenticationResponse register(RegisterRequest request) {
@@ -33,9 +36,22 @@ public class AuthenticationService {
                 .email(request.getEmail())
                 .phone(request.getPhone())
                 .password(encoder.encode(request.getPassword()))
-                .role(Role.CUSTOMER)
+                .role(request.getRole())
                 .build();
         repository.save(user);
+
+
+        if (user.getRole() == Role.CUSTOMER && !customerRepo.existsByUserId(user.getId())) {
+            Customer customer = Customer.builder()
+                    .user(user)
+                    .city(null)
+                    .address(null)
+                    .loyaltyMember(false)
+                    .discountPercent(0)
+                    .build();
+            customerRepo.save(customer);
+        }
+        
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder().token(jwtToken).build();
     }

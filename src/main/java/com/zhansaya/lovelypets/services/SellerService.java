@@ -74,5 +74,19 @@ public class SellerService {
         if (!sellerRepo.existsById(id)) throw new IllegalArgumentException("Seller not found");
         sellerRepo.deleteById(id);
     }
+
+    @Transactional
+    public void addViolationOrDelete(Long id) {
+        Seller s = sellerRepo.findById(id).orElseThrow();
+        s.setViolationsCount(s.getViolationsCount()+1);
+        if (s.getViolationsCount() >= 3) sellerRepo.delete(s);
+    }
+    @Transactional
+    public SellerResponse verify(Long id) {
+        Seller s = sellerRepo.findById(id).orElseThrow();
+        s.setVerified(true);
+        return SellerResponse.from(sellerRepo.save(s));
+    }
+
 }
 

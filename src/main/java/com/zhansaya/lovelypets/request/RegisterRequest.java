@@ -1,5 +1,6 @@
 package com.zhansaya.lovelypets.request;
 
+import com.zhansaya.lovelypets.domain.enums.Role;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -15,4 +16,5 @@ public class RegisterRequest {
     String email;
     String phone;
     String password;
+    Role role;
 }

@@ -32,4 +32,10 @@ public class Product {
 
     @Column(name = "price", nullable = false, precision = 12, scale = 2)
     BigDecimal price;
+
+    @Column(name = "typo_flag", nullable = false)
+    Boolean typoFlag = false;
+
+    @Column(name = "typo_note", length = 500)
+    String typoNote;
 }

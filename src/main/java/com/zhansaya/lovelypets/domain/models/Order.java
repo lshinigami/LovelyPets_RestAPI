@@ -1,5 +1,7 @@
 package com.zhansaya.lovelypets.domain.models;
 
+import com.zhansaya.lovelypets.domain.enums.OrderStatus;
+import com.zhansaya.lovelypets.domain.enums.OrganizationType;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -28,4 +30,15 @@ public class Order {
     @CreationTimestamp
     @Column(name = "order_date", nullable = false, updatable = false)
     Instant orderDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "order_status", nullable = false, length = 50)
+    OrderStatus orderStatus;
+
+    @PrePersist
+    public void prePersist() {
+        if (orderStatus == null) {
+            orderStatus = OrderStatus.PLACED;
+        }
+    }
 }
