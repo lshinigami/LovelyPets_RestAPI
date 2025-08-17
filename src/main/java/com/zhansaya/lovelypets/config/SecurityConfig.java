@@ -30,6 +30,7 @@ public class SecurityConfig {
             )
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers("/api/auth/**").permitAll()
+                    .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                     .requestMatchers("/api/**").permitAll()
                     .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/sellers").permitAll()
                     .requestMatchers(org.springframework.http.HttpMethod.GET,  "/api/sellers/**").permitAll()
